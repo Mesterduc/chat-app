@@ -18,8 +18,8 @@ class LoginViewController: UIViewController {
         
         view.addSubview(loginLabel)
         view.addSubview(loginView)
-        loginView.addSubview(emailTextView)
-        loginView.addSubview(passwordTextView)
+        loginView.addSubview(emailTextField)
+        loginView.addSubview(passwordTextField)
         view.addSubview(loginButton)
         
         setup()
@@ -44,7 +44,7 @@ class LoginViewController: UIViewController {
         return label
     }()
     
-    private let emailTextView: UITextField = {
+    private let emailTextField: UITextField = {
         let email = UITextField()
         email.placeholder = "Email"
         email.layer.cornerRadius = 15
@@ -58,7 +58,7 @@ class LoginViewController: UIViewController {
         return email
     }()
     
-    private let passwordTextView: UITextField = {
+    private let passwordTextField: UITextField = {
         let password = UITextField()
         password.placeholder = "Password"
         password.layer.cornerRadius = 15
@@ -85,7 +85,7 @@ class LoginViewController: UIViewController {
     }()
     
     @objc private func loginUser() {
-        guard let email = emailTextView.text, !email.isEmpty, let password = passwordTextView.text, !password.isEmpty else {
+        guard let email = emailTextField.text, !email.isEmpty, let password = passwordTextField.text, !password.isEmpty else {
             print("No user with that information")
             return
         }
@@ -114,15 +114,15 @@ class LoginViewController: UIViewController {
             loginView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
             loginView.heightAnchor.constraint(equalToConstant: 120),
 
-            emailTextView.widthAnchor.constraint(equalTo: loginView.widthAnchor),
-            emailTextView.heightAnchor.constraint(equalToConstant: 50),
-            emailTextView.centerXAnchor.constraint(equalTo: loginView.centerXAnchor),
-            emailTextView.topAnchor.constraint(equalTo: loginView.topAnchor),
-            emailTextView.bottomAnchor.constraint(equalTo: passwordTextView.topAnchor, constant: -20),
+            emailTextField.widthAnchor.constraint(equalTo: loginView.widthAnchor),
+            emailTextField.heightAnchor.constraint(equalToConstant: 50),
+            emailTextField.centerXAnchor.constraint(equalTo: loginView.centerXAnchor),
+            emailTextField.topAnchor.constraint(equalTo: loginView.topAnchor),
+            emailTextField.bottomAnchor.constraint(equalTo: passwordTextField.topAnchor, constant: -20),
 
-            passwordTextView.widthAnchor.constraint(equalTo: loginView.widthAnchor),
-            passwordTextView.heightAnchor.constraint(equalToConstant: 50),
-            passwordTextView.centerXAnchor.constraint(equalTo: loginView.centerXAnchor),
+            passwordTextField.widthAnchor.constraint(equalTo: loginView.widthAnchor),
+            passwordTextField.heightAnchor.constraint(equalToConstant: 50),
+            passwordTextField.centerXAnchor.constraint(equalTo: loginView.centerXAnchor),
             
             loginButton.topAnchor.constraint(equalTo: loginView.bottomAnchor, constant: 15),
             loginButton.heightAnchor.constraint(equalToConstant: 40),

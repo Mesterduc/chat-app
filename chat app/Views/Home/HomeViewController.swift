@@ -17,6 +17,7 @@ class HomeViewController: UIViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
         view.addSubview(logoutButton)
+        view.addSubview(msgTextField)
         
         setup()
         
@@ -27,10 +28,11 @@ class HomeViewController: UIViewController {
         
         handle = FirebaseAuth.Auth.auth().addStateDidChangeListener { auth, user in
             guard let user = user else {
+                
                  self.transitionToLogin()
                 return
             }
-            print(user.email!)
+            print(user.uid)
         }
     }
     
@@ -58,14 +60,20 @@ class HomeViewController: UIViewController {
         } catch let signOutError as NSError {
           print("Error signing out: %@", signOutError)
         }
-//        FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
-//            guard let strongSelf = self else { return }
-//            if let error = error {
-//                print(error)
-//                return
-//            }
-//        }
     }
+    
+    private let msgTextField: UITextField = {
+        let msg = UITextField()
+        msg.placeholder = "Type message"
+        msg.layer.borderColor = UIColor.black.cgColor
+        msg.layer.borderWidth = 1.5
+        msg.backgroundColor = .gray
+        msg.addPadding(.left(10))
+//        msg.autocorrectionType = .no
+        msg.translatesAutoresizingMaskIntoConstraints = false
+        
+        return msg
+    }()
     
     private func setup() {
         NSLayoutConstraint.activate([
@@ -73,10 +81,17 @@ class HomeViewController: UIViewController {
             logoutButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             logoutButton.heightAnchor.constraint(equalToConstant: 40),
             
+            msgTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            msgTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            msgTextField.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
+            msgTextField.heightAnchor.constraint(equalToConstant: 50),
+            
         
         ])
     }
 
 
 }
+
+
 
