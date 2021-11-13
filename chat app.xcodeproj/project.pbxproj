@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		4D6C5EA527401051004AA0EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6C5EA427401051004AA0EE /* AppDelegate.swift */; };
 		4D6C5EA727401051004AA0EE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6C5EA627401051004AA0EE /* SceneDelegate.swift */; };
-		4D6C5EA927401051004AA0EE /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6C5EA827401051004AA0EE /* HomeController.swift */; };
+		4D6C5EA927401051004AA0EE /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6C5EA827401051004AA0EE /* HomeViewController.swift */; };
 		4D6C5EAE27401054004AA0EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D6C5EAD27401054004AA0EE /* Assets.xcassets */; };
-		4D6C5EB9274011F8004AA0EE /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6C5EB8274011F8004AA0EE /* LoginController.swift */; };
+		4D6C5EB9274011F8004AA0EE /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6C5EB8274011F8004AA0EE /* LoginViewController.swift */; };
 		4D6C5EBE27401846004AA0EE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4D6C5EBD27401846004AA0EE /* GoogleService-Info.plist */; };
 		DCF84D88BEC5CCF09B490CAB /* Pods_chat_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 832732DB5AB7E632A0AB4851 /* Pods_chat_app.framework */; };
 /* End PBXBuildFile section */
@@ -20,10 +20,10 @@
 		4D6C5EA127401051004AA0EE /* chat app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "chat app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D6C5EA427401051004AA0EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4D6C5EA627401051004AA0EE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		4D6C5EA827401051004AA0EE /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
+		4D6C5EA827401051004AA0EE /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		4D6C5EAD27401054004AA0EE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4D6C5EB227401054004AA0EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4D6C5EB8274011F8004AA0EE /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		4D6C5EB8274011F8004AA0EE /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		4D6C5EBD27401846004AA0EE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6852B95740E41632BFB3A5DA /* Pods-chat app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-chat app.release.xcconfig"; path = "Target Support Files/Pods-chat app/Pods-chat app.release.xcconfig"; sourceTree = "<group>"; };
 		832732DB5AB7E632A0AB4851 /* Pods_chat_app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_chat_app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,7 +85,7 @@
 		4D6C5EBB2740120D004AA0EE /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				4D6C5EA827401051004AA0EE /* HomeController.swift */,
+				4D6C5EA827401051004AA0EE /* HomeViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -93,7 +93,7 @@
 		4D6C5EBC27401213004AA0EE /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				4D6C5EB8274011F8004AA0EE /* LoginController.swift */,
+				4D6C5EB8274011F8004AA0EE /* LoginViewController.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -229,8 +229,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D6C5EA927401051004AA0EE /* HomeController.swift in Sources */,
-				4D6C5EB9274011F8004AA0EE /* LoginController.swift in Sources */,
+				4D6C5EA927401051004AA0EE /* HomeViewController.swift in Sources */,
+				4D6C5EB9274011F8004AA0EE /* LoginViewController.swift in Sources */,
 				4D6C5EA527401051004AA0EE /* AppDelegate.swift in Sources */,
 				4D6C5EA727401051004AA0EE /* SceneDelegate.swift in Sources */,
 			);
