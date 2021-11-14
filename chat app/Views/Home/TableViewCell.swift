@@ -13,10 +13,7 @@ class TableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor  = .white
-        contentView.layer.cornerRadius = 15
         
-//        contentView.addSubview(user)
-//        contentView.addSubview(message)
         contentView.addSubview(msgCardView)
         msgCardView.addSubview(user)
         msgCardView.addSubview(message)
@@ -38,7 +35,7 @@ class TableViewCell: UITableViewCell {
     
      let msgCardView: UIView = {
       let view = UIView()
-        view.layer.cornerRadius = 20
+        view.layer.cornerRadius = 10
          view.layer.borderColor = CGColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 0.45)
          view.layer.borderWidth = 1
         view.translatesAutoresizingMaskIntoConstraints = false

@@ -26,7 +26,7 @@ class HomeViewModel {
     }
     
     func fetchChat() {
-        db.collection("chat").order(by: "timestamp").getDocuments() { (result, err) in
+        db.collection("chat").order(by: "timestamp", descending: true).getDocuments() { (result, err) in
             if let err = err {
                 print("Error getting documents: \(err)")
                 return

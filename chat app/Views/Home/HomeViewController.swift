@@ -92,6 +92,7 @@ class HomeViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.rowHeight = 70
         tableView.separatorStyle = .none
+        tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.identifier)
         return tableView
     }()
