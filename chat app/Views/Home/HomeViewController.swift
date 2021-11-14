@@ -7,53 +7,24 @@
 
 import UIKit
 import FirebaseAuth
-import FirebaseFirestore
+import Combine
 
 class HomeViewController: UIViewController {
-
+    
     private let vm = HomeViewModel()
     var handle: AuthStateDidChangeListenerHandle?
-    let db = Firestore.firestore()
+    private var cancellables = Set<AnyCancellable>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         view.backgroundColor = .white
-//        view.addSubview(logoutButton)
+        //        view.addSubview(logoutButton)
         view.addSubview(msgTextField)
         view.addSubview(tableView)
         
-        db.collection("chat").getDocuments() { (result, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-                return
-            }
-            guard let result = result else {
-                print("no data")
-                return
-            }
-            
-                for document in result.documents {
-                    let data = try? document.data(as: Chat.self)
-                    
-                    
-//                    print(data["user"] as! String)
-                    print(data!)
-                    
-//                    for data in document.data() {
-//                        print(data["user"] as? String ?? "")
-//                        if data.key == "user" {
-//                            Chat(message: <#T##String#>, timestamp: <#T##Timer#>, user: <#T##String#>)
-//                            self.vm.hej.append(data)
-//                            self.tableView.reloadData()
-//                        }
-//                    }
-                }
-            
-        }
-        
         tableView.delegate = self
         tableView.dataSource = self
+        updateTableView()
         
         setup()
         
@@ -65,11 +36,19 @@ class HomeViewController: UIViewController {
         handle = FirebaseAuth.Auth.auth().addStateDidChangeListener { auth, user in
             guard let user = user else {
                 
-                 self.transitionToLogin()
+                self.transitionToLogin()
                 return
             }
             print(user.uid)
         }
+    }
+    
+    private func updateTableView(){
+        self.vm.$chat
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.tableView.reloadData()
+            }.store(in: &cancellables)
     }
     
     private func transitionToLogin(){
@@ -92,18 +71,19 @@ class HomeViewController: UIViewController {
     
     @objc private func logoutUser() {
         do {
-           try Auth.auth().signOut()
+            try Auth.auth().signOut()
         } catch let signOutError as NSError {
-          print("Error signing out: %@", signOutError)
+            print("Error signing out: %@", signOutError)
         }
     }
     
-    let tableView: UITableView = {
-            let tableView = UITableView()
-            tableView.translatesAutoresizingMaskIntoConstraints = false
-            tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-            return tableView
-        }()
+    private let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.rowHeight = 50
+        tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.identifier)
+        return tableView
+    }()
     
     private let msgTextField: UITextField = {
         let msg = UITextField()
@@ -119,9 +99,9 @@ class HomeViewController: UIViewController {
     
     private func setup() {
         NSLayoutConstraint.activate([
-//            logoutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            logoutButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-//            logoutButton.heightAnchor.constraint(equalToConstant: 40),
+            //            logoutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            //            logoutButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            //            logoutButton.heightAnchor.constraint(equalToConstant: 40),
             
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -133,7 +113,7 @@ class HomeViewController: UIViewController {
             msgTextField.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -35),
             msgTextField.heightAnchor.constraint(equalToConstant: 50),
             
-        
+            
         ])
     }
 }
@@ -142,26 +122,28 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.vm.chat.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        db.collection("chat")
+        let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.identifier, for: indexPath) as! TableViewCell
+     
+        cell.user.text = self.vm.chat[indexPath.row].user
+        cell.message.text = self.vm.chat[indexPath.row].message
         
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        cell.addSubview(label)
-        label.text = self.vm.chat[indexPath.row]
-//        print(self.hej[indexPath.row])
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: cell.leadingAnchor),
-            label.topAnchor.constraint(equalTo: cell.topAnchor),
-            
+//            tableView.heightAnchor.constraint(equalToConstant: 50)
+
         ])
-        
         return cell
     }
-
-
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) as? TableViewCell {
+            
+            cell.user.isHidden = !cell.user.isHidden
+        }
+        
+    }
+    
+    
 }
 
 
