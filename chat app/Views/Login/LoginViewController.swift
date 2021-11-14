@@ -9,7 +9,6 @@ import UIKit
 import FirebaseAuth
 
 class LoginViewController: UIViewController {
-//    let db = Firestore.firestore()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +25,7 @@ class LoginViewController: UIViewController {
         
     }
     
-    private let loginView:UIView = {
+    private let loginView: UIView = {
       let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
       return view

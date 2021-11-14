@@ -11,16 +11,22 @@ import Combine
 
 class HomeViewModel {
     private var db = Firestore.firestore()
-//    var chat = [String]()
     @Published var chat: [Chat] = []
-    
     
     init( ) {
         fetchChat()
     }
     
+    func sendMessage(message: String, name: String){
+        db.collection("chat").addDocument(data: [
+            "user": name,
+            "timestamp": Timestamp(date: Date()),
+            "message": message,
+        ])
+    }
+    
     func fetchChat() {
-        db.collection("chat").getDocuments() { (result, err) in
+        db.collection("chat").order(by: "timestamp").getDocuments() { (result, err) in
             if let err = err {
                 print("Error getting documents: \(err)")
                 return
@@ -29,14 +35,10 @@ class HomeViewModel {
                 print("no data")
                 return
             }
-                for document in result.documents {
+            for document in result.documents {
                     let data = try? document.data(as: Chat.self)
-                    
                     self.chat.append(data!)
-                
                 }
-            print(self.chat)
-            
         }
     }
 }

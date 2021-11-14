@@ -11,9 +11,10 @@ import Combine
 
 class HomeViewController: UIViewController {
     
-    private let vm = HomeViewModel()
+    let vm = HomeViewModel()
     var handle: AuthStateDidChangeListenerHandle?
     private var cancellables = Set<AnyCancellable>()
+    var activeUser = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +22,7 @@ class HomeViewController: UIViewController {
         //        view.addSubview(logoutButton)
         view.addSubview(msgTextField)
         view.addSubview(tableView)
+        view.addSubview(sendMessage)
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -35,11 +37,19 @@ class HomeViewController: UIViewController {
         
         handle = FirebaseAuth.Auth.auth().addStateDidChangeListener { auth, user in
             guard let user = user else {
-                
-                self.transitionToLogin()
+                self.activeUser = ""
+                self.transitionToLogin(viewController: LoginViewController())
                 return
             }
-            print(user.uid)
+            
+            guard let username = user.displayName else {
+                self.transitionToLogin(viewController: UsernameViewController())
+                return
+            }
+            
+            self.activeUser = username
+//            print(username)
+//            print("hello")
         }
     }
     
@@ -51,8 +61,8 @@ class HomeViewController: UIViewController {
             }.store(in: &cancellables)
     }
     
-    private func transitionToLogin(){
-        let vc = UINavigationController(rootViewController: LoginViewController())
+    private func transitionToLogin(viewController: UIViewController){
+        let vc = UINavigationController(rootViewController: viewController)
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
     }
@@ -80,7 +90,8 @@ class HomeViewController: UIViewController {
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.rowHeight = 50
+        tableView.rowHeight = 70
+        tableView.separatorStyle = .none
         tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.identifier)
         return tableView
     }()
@@ -97,6 +108,24 @@ class HomeViewController: UIViewController {
         return msg
     }()
     
+    private let sendMessage: UIButton = {
+        let sendButton = UIButton()
+        sendButton.setTitle("Send", for: .normal)
+        sendButton.translatesAutoresizingMaskIntoConstraints = false
+        sendButton.backgroundColor = .gray
+        
+        sendButton.addTarget(self, action: #selector(send2), for: .touchUpInside)
+        
+        return sendButton
+    }()
+    @objc private func send2() {
+        if let text = msgTextField.text, text != "" {
+            self.vm.sendMessage(message: text, name: self.activeUser)
+        }else {
+            print("Text is emty")
+        }
+    }
+    
     private func setup() {
         NSLayoutConstraint.activate([
             //            logoutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -109,42 +138,21 @@ class HomeViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: msgTextField.topAnchor),
             
             msgTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            msgTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            msgTextField.trailingAnchor.constraint(equalTo: sendMessage.leadingAnchor, constant: -10),
             msgTextField.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -35),
             msgTextField.heightAnchor.constraint(equalToConstant: 50),
             
+            sendMessage.leadingAnchor.constraint(equalTo: msgTextField.trailingAnchor, constant: 10),
+            sendMessage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            sendMessage.heightAnchor.constraint(equalToConstant: 50),
+            sendMessage.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -35),
+            
             
         ])
     }
 }
 
-extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.vm.chat.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.identifier, for: indexPath) as! TableViewCell
-     
-        cell.user.text = self.vm.chat[indexPath.row].user
-        cell.message.text = self.vm.chat[indexPath.row].message
-        
-        NSLayoutConstraint.activate([
-//            tableView.heightAnchor.constraint(equalToConstant: 50)
 
-        ])
-        return cell
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) as? TableViewCell {
-            
-            cell.user.isHidden = !cell.user.isHidden
-        }
-        
-    }
-    
-    
-}
 
 
 

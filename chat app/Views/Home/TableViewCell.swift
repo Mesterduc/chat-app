@@ -13,9 +13,13 @@ class TableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor  = .white
+        contentView.layer.cornerRadius = 15
         
-        contentView.addSubview(user)
-        contentView.addSubview(message)
+//        contentView.addSubview(user)
+//        contentView.addSubview(message)
+        contentView.addSubview(msgCardView)
+        msgCardView.addSubview(user)
+        msgCardView.addSubview(message)
         layout()
         
     }
@@ -26,23 +30,27 @@ class TableViewCell: UITableViewCell {
     
     private func layout(){
         NSLayoutConstraint.activate([
-            // insert constraints
-            user.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            user.topAnchor.constraint(equalTo: contentView.topAnchor),
-            message.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            message.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8),
-            message.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.9),
+            msgCardView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8),
+            msgCardView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.9),
             
         ])
     }
     
+     let msgCardView: UIView = {
+      let view = UIView()
+        view.layer.cornerRadius = 20
+         view.layer.borderColor = CGColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 0.45)
+         view.layer.borderWidth = 1
+        view.translatesAutoresizingMaskIntoConstraints = false
+      return view
+    }()
+    
     let message: UILabel = {
-        let messageLabel = UILabel()
+        let messageLabel = PaddingLabel(withInsets: 1, 1, 5, 5)
         messageLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         messageLabel.textColor = .label
-        messageLabel.textAlignment = .center
+        messageLabel.textAlignment = .left
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
-//        messageLabel.backgroundColor = .gray
         return messageLabel
     }()
     
