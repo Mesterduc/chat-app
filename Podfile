@@ -12,5 +12,5 @@ inhibit_all_warnings!
 
 pod 'Firebase/Auth'
 pod 'Firebase/Firestore'
-
+pod 'FirebaseFirestoreSwift'
 end
