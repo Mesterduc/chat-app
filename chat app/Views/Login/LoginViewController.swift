@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseAuth
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,8 +20,12 @@ class LoginViewController: UIViewController {
         loginView.addSubview(emailTextField)
         loginView.addSubview(passwordTextField)
         view.addSubview(loginButton)
+        
         let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
         view.addGestureRecognizer(tap)
+        
+        emailTextField.delegate  = self
+        passwordTextField.delegate = self
         
         setup()
         
@@ -102,6 +106,12 @@ class LoginViewController: UIViewController {
 
         }
     }
+    
+    func textFieldShouldReturn(_ scoreText: UITextField) -> Bool {
+            self.view.endEditing(true)
+            return true
+        }
+    
     
     func setup(){
         NSLayoutConstraint.activate([

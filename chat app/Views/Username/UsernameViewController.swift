@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseAuth
 
-class UsernameViewController: UIViewController {
+class UsernameViewController: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +19,8 @@ class UsernameViewController: UIViewController {
         view.addSubview(usernameView)
         usernameView.addSubview(usernameTextField)
         usernameView.addSubview(confirmButton)
+        
+        usernameTextField.delegate = self
         
         setup()
         
@@ -86,6 +88,11 @@ class UsernameViewController: UIViewController {
             self.dismiss(animated: true, completion: nil)
         }
     }
+    
+    func textFieldShouldReturn(_ scoreText: UITextField) -> Bool {
+            self.view.endEditing(true)
+            return true
+        }
     
     func setup(){
         NSLayoutConstraint.activate([

@@ -9,7 +9,7 @@ import UIKit
 import FirebaseAuth
 import Combine
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UITextFieldDelegate {
     
     let vm = HomeViewModel()
     var handle: AuthStateDidChangeListenerHandle?
@@ -23,6 +23,7 @@ class HomeViewController: UIViewController {
         view.addSubview(msgTextField)
         view.addSubview(tableView)
         view.addSubview(sendMessageButton)
+        msgTextField.delegate = self
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -31,6 +32,7 @@ class HomeViewController: UIViewController {
         setup()
         
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         handle = FirebaseAuth.Auth.auth().addStateDidChangeListener { auth, user in
@@ -128,10 +130,15 @@ class HomeViewController: UIViewController {
         }
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+    
     private func setup() {
         NSLayoutConstraint.activate([
             logoutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logoutButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
+            logoutButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
             logoutButton.heightAnchor.constraint(equalToConstant: 50),
             logoutButton.bottomAnchor.constraint(equalTo: tableView.topAnchor),
             
