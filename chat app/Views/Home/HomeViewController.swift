@@ -22,7 +22,7 @@ class HomeViewController: UIViewController {
         view.addSubview(logoutButton)
         view.addSubview(msgTextField)
         view.addSubview(tableView)
-        view.addSubview(sendMessage)
+        view.addSubview(sendMessageButton)
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -33,7 +33,6 @@ class HomeViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         handle = FirebaseAuth.Auth.auth().addStateDidChangeListener { auth, user in
             if user == nil {
                 self.activeUser = ""
@@ -46,6 +45,7 @@ class HomeViewController: UIViewController {
             }
             
             self.activeUser = username
+            print("hell0 \(username)")
             self.tableView.reloadData()
         }
     }
@@ -83,11 +83,7 @@ class HomeViewController: UIViewController {
     }()
     
     @objc private func logoutUser() {
-        do {
-            try Auth.auth().signOut()
-        } catch let signOutError as NSError {
-            print("Error signing out: %@", signOutError)
-        }
+        self.vm.signOut()
     }
     
     private let tableView: UITableView = {
@@ -113,17 +109,17 @@ class HomeViewController: UIViewController {
         return msg
     }()
     
-    private let sendMessage: UIButton = {
+    private let sendMessageButton: UIButton = {
         let sendButton = UIButton()
         sendButton.setTitle("Send", for: .normal)
         sendButton.translatesAutoresizingMaskIntoConstraints = false
         sendButton.backgroundColor = .gray
         
-        sendButton.addTarget(self, action: #selector(send2), for: .touchUpInside)
+        sendButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
         
         return sendButton
     }()
-    @objc private func send2() {
+    @objc private func sendMessage() {
         if let text = msgTextField.text, text != "" {
             self.vm.sendMessage(message: text, name: self.activeUser)
             msgTextField.text = ""
@@ -135,8 +131,8 @@ class HomeViewController: UIViewController {
     private func setup() {
         NSLayoutConstraint.activate([
             logoutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logoutButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
-            logoutButton.heightAnchor.constraint(equalToConstant: 40),
+            logoutButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
+            logoutButton.heightAnchor.constraint(equalToConstant: 50),
             logoutButton.bottomAnchor.constraint(equalTo: tableView.topAnchor),
             
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -144,14 +140,14 @@ class HomeViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: msgTextField.topAnchor),
             
             msgTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            msgTextField.trailingAnchor.constraint(equalTo: sendMessage.leadingAnchor, constant: -10),
+            msgTextField.trailingAnchor.constraint(equalTo: sendMessageButton.leadingAnchor, constant: -10),
             msgTextField.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -35),
             msgTextField.heightAnchor.constraint(equalToConstant: 50),
             
-            sendMessage.leadingAnchor.constraint(equalTo: msgTextField.trailingAnchor, constant: 10),
-            sendMessage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            sendMessage.heightAnchor.constraint(equalToConstant: 50),
-            sendMessage.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -35),
+            sendMessageButton.leadingAnchor.constraint(equalTo: msgTextField.trailingAnchor, constant: 10),
+            sendMessageButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            sendMessageButton.heightAnchor.constraint(equalToConstant: 50),
+            sendMessageButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -35),
             
             
         ])

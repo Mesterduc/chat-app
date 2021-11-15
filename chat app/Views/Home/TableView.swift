@@ -38,7 +38,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         formatter.dateFormat = "  dd.MM.yyyy  HH:mm"
         cell.timestamp.text = formatter.string(from: chatData.timestamp)
         
-        if (chatData.user == self.vm.userState) {
+        if (chatData.user == self.activeUser) {
             cell.msgCardView.backgroundColor = .systemBlue
             cell.message.textAlignment = .right
             NSLayoutConstraint.activate([

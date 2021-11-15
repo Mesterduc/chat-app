@@ -23,44 +23,14 @@ class HomeViewModel {
     
     init( ) {
         fetchChat()
-        checkLoginState()
     }
     
     func sendMessage(message: String, name: String){
         db.collection("chat").addDocument(data: [
-            "user": self.userState,
+            "user": name,
             "timestamp": Timestamp(date: Date()),
             "message": message,
         ])
-    }
-    
-    func checkLoginState() {
-        handle = FirebaseAuth.Auth.auth().addStateDidChangeListener { auth, user in
-            if user == nil {
-                self.activeUser = ""
-//                self.transitionTo(viewController: LoginViewController())
-                self.userState = LoginState.notLogin.rawValue
-                print("hello")
-                return
-            }
-            guard let username = auth.currentUser?.displayName else {
-//                self.transitionTo(viewController: UsernameViewController())
-                self.userState = LoginState.noUsernamer.rawValue
-                print("hello")
-                return
-            }
-            
-            self.userState = username
-            print("hello \(username)")
-            
-//            self.activeUser = username
-//            self.tableView.reloadData()
-        }
-    }
-    
-    func removeLoginState(){
-        self.activeUser = ""
-        Auth.auth().removeStateDidChangeListener(handle!)
     }
     
     func signOut() {
