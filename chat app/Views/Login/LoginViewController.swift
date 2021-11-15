@@ -20,6 +20,8 @@ class LoginViewController: UIViewController {
         loginView.addSubview(emailTextField)
         loginView.addSubview(passwordTextField)
         view.addSubview(loginButton)
+        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
+        view.addGestureRecognizer(tap)
         
         setup()
         

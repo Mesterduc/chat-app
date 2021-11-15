@@ -19,7 +19,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        //        view.addSubview(logoutButton)
+        view.addSubview(logoutButton)
         view.addSubview(msgTextField)
         view.addSubview(tableView)
         view.addSubview(sendMessage)
@@ -33,27 +33,30 @@ class HomeViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // [START auth_listener]
         
         handle = FirebaseAuth.Auth.auth().addStateDidChangeListener { auth, user in
-            guard let user = user else {
+            if user == nil {
                 self.activeUser = ""
                 self.transitionToLogin(viewController: LoginViewController())
                 return
             }
-            
-            guard let username = user.displayName else {
+            guard let username = auth.currentUser?.displayName else {
                 self.transitionToLogin(viewController: UsernameViewController())
                 return
             }
             
             self.activeUser = username
-//            print(username)
-//            print("hello")
+            self.tableView.reloadData()
         }
     }
     
-    private func updateTableView(){
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.activeUser = ""
+        Auth.auth().removeStateDidChangeListener(handle!)
+    }
+    
+    func updateTableView(){
         self.vm.$chat
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
@@ -93,6 +96,7 @@ class HomeViewController: UIViewController {
         tableView.rowHeight = 70
         tableView.separatorStyle = .none
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
+        tableView.sectionFooterHeight = 0
         tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.identifier)
         return tableView
     }()
@@ -122,6 +126,7 @@ class HomeViewController: UIViewController {
     @objc private func send2() {
         if let text = msgTextField.text, text != "" {
             self.vm.sendMessage(message: text, name: self.activeUser)
+            msgTextField.text = ""
         }else {
             print("Text is emty")
         }
@@ -129,13 +134,13 @@ class HomeViewController: UIViewController {
     
     private func setup() {
         NSLayoutConstraint.activate([
-            //            logoutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            //            logoutButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            //            logoutButton.heightAnchor.constraint(equalToConstant: 40),
+            logoutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoutButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
+            logoutButton.heightAnchor.constraint(equalToConstant: 40),
+            logoutButton.bottomAnchor.constraint(equalTo: tableView.topAnchor),
             
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: msgTextField.topAnchor),
             
             msgTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),

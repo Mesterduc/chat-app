@@ -11,7 +11,7 @@ import FirebaseFirestoreSwift
 struct Chat: Codable {
     @DocumentID var id: String?
     let message: String
-//    var timestamp: Timer
+    var timestamp: Date
     var user: String
     
 }

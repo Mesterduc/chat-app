@@ -8,6 +8,11 @@
 import UIKit
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 40
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.vm.chat.count
     }
@@ -15,6 +20,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? TableViewCell {
             cell.user.isHidden = !cell.user.isHidden
+            cell.timestamp.isHidden = !cell.timestamp.isHidden
             cell.backgroundColor = .none
         }
     }
@@ -23,37 +29,32 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.identifier, for: indexPath) as! TableViewCell
         
         cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
-     
-        cell.user.text = self.vm.chat[indexPath.row].user
-        cell.message.text = self.vm.chat[indexPath.row].message
         
-        if (self.vm.chat[indexPath.row].user == self.activeUser) {
+        let chatData = self.vm.chat[indexPath.row]
+        
+        cell.user.text = chatData.user
+        cell.message.text = chatData.message
+        let formatter = DateFormatter()
+        formatter.dateFormat = "  dd.MM.yyyy  HH:mm"
+        cell.timestamp.text = formatter.string(from: chatData.timestamp)
+        
+        if (chatData.user == self.vm.userState) {
             cell.msgCardView.backgroundColor = .systemBlue
             cell.message.textAlignment = .right
             NSLayoutConstraint.activate([
-                cell.msgCardView.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -10),
-                cell.user.trailingAnchor.constraint(equalTo: cell.msgCardView.trailingAnchor, constant: -10),
-                cell.user.topAnchor.constraint(equalTo: cell.msgCardView.topAnchor),
-                cell.message.trailingAnchor.constraint(equalTo: cell.msgCardView.trailingAnchor, constant: -10),
+                cell.message.trailingAnchor.constraint(equalTo: cell.msgCardView.trailingAnchor),
                 cell.message.widthAnchor.constraint(equalTo: cell.msgCardView.widthAnchor),
                 cell.message.heightAnchor.constraint(equalTo: cell.msgCardView.heightAnchor),
             ])
         }else {
             cell.msgCardView.backgroundColor = .gray
+            cell.message.textAlignment = .left
             NSLayoutConstraint.activate([
-                cell.msgCardView.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 10),
-                cell.user.leadingAnchor.constraint(equalTo: cell.msgCardView.leadingAnchor, constant: 10),
-                cell.user.topAnchor.constraint(equalTo: cell.msgCardView.topAnchor),
-                cell.message.leadingAnchor.constraint(equalTo: cell.msgCardView.leadingAnchor, constant: 10),
+                cell.message.leadingAnchor.constraint(equalTo: cell.msgCardView.leadingAnchor),
                 cell.message.widthAnchor.constraint(equalTo: cell.msgCardView.widthAnchor),
                 cell.message.heightAnchor.constraint(equalTo: cell.msgCardView.heightAnchor),
             ])
         }
-        
-        
-        NSLayoutConstraint.activate([
-
-        ])
         return cell
     }
     

@@ -17,6 +17,7 @@ class TableViewCell: UITableViewCell {
         contentView.addSubview(msgCardView)
         msgCardView.addSubview(user)
         msgCardView.addSubview(message)
+        msgCardView.addSubview(timestamp)
         layout()
         
     }
@@ -27,8 +28,13 @@ class TableViewCell: UITableViewCell {
     
     private func layout(){
         NSLayoutConstraint.activate([
-            msgCardView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8),
-            msgCardView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.9),
+            msgCardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            msgCardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            msgCardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            msgCardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor , constant: -5),
+            user.centerXAnchor.constraint(equalTo: msgCardView.centerXAnchor),
+            user.topAnchor.constraint(equalTo: msgCardView.topAnchor),
+            timestamp.leadingAnchor.constraint(equalTo: user.trailingAnchor),
             
         ])
     }
@@ -43,12 +49,20 @@ class TableViewCell: UITableViewCell {
     }()
     
     let message: UILabel = {
-        let messageLabel = PaddingLabel(withInsets: 1, 1, 5, 5)
+        let messageLabel = PaddingLabel(withInsets: 0, 0, 5, 5)
         messageLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         messageLabel.textColor = .label
-        messageLabel.textAlignment = .left
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
         return messageLabel
+    }()
+    
+    let timestamp: UILabel = {
+        let timeLabel = UILabel()
+        timeLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        timeLabel.textColor = .label
+        timeLabel.isHidden = true
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        return timeLabel
     }()
     
     let user: UILabel = {

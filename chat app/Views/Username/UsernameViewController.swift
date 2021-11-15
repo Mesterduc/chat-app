@@ -53,6 +53,7 @@ class UsernameViewController: UIViewController {
         email.autocorrectionType = .no
         email.translatesAutoresizingMaskIntoConstraints = false
         
+        
         return email
     }()
     
@@ -82,6 +83,7 @@ class UsernameViewController: UIViewController {
             if error == nil {
                 print("Cant Change name")
             }
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
